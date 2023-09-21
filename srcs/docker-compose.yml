@@ -1,0 +1,23 @@
+version:
+services:
+  NGINX:
+  	image: "nginx:latest"
+	build: requirements/nginx/docker
+	ports:
+	  - "443:80"
+	
+  mysql_database:
+	image: "mysql:latest"
+
+  
+  
+  web:
+    build: .
+    ports:
+      - "8000:5000"
+    volumes:
+      - .:/code
+    environment:
+      FLASK_DEBUG: "true"
+  redis:
+    image: "redis:alpine"
