@@ -9,8 +9,7 @@ services:
   mysql_database:
 	image: "mysql:latest"
 
-  
-  
+   
   web:
     build: .
     ports:
