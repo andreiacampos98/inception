@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    nginx.conf                                         :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: andreia <andreia@student.42.fr>            +#+  +:+       +#+         #
+#    By: anaraujo <anaraujo@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/09/24 19:30:01 by andreia           #+#    #+#              #
-#    Updated: 2023/09/24 19:46:16 by andreia          ###   ########.fr        #
+#    Updated: 2023/09/27 20:13:41 by anaraujo         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -56,30 +56,5 @@ server
 
     location /images/ {
         root /data;
-    }
-}
-
-# subdomains redirect
-server {
-    listen                  443 ssl http2;
-    listen                  [::]:443 ssl http2;
-    server_name             *.example.com;
-
-    # SSL
-    ssl_certificate         /etc/letsencrypt/live/example.com/fullchain.pem;
-    ssl_certificate_key     /etc/letsencrypt/live/example.com/privkey.pem;
-    ssl_trusted_certificate /etc/letsencrypt/live/example.com/chain.pem;
-    return                  301 https://example.com$request_uri;
-}
-
-# HTTP redirect
-server {
-    listen      80;
-    listen      [::]:80;
-    server_name .example.com;
-    include     nginxconfig.io/letsencrypt.conf;
-
-    location / {
-        return 301 https://example.com$request_uri;
     }
 }

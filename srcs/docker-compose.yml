@@ -1,22 +1,18 @@
-version:
+version: "3"
+
+networks:
+  inception:
+    name: inception
+
 services:
   NGINX:
-  	image: "nginx:latest"
-	build: requirements/nginx/docker
-	ports:
-	  - "443:80"
-	
-  mysql_database:
-	image: "mysql:latest"
-
-   
-  web:
-    build: .
+    container_name: nginx+
+    image: nginx:42
+    build: requirements/nginx/
     ports:
-      - "8000:5000"
-    volumes:
-      - .:/code
-    environment:
-      FLASK_DEBUG: "true"
-  redis:
-    image: "redis:alpine"
+      - "443:80"
+    networks:
+      - inception
+    env_file:
+      - .env
+    restart: always

@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: andreia <andreia@student.42.fr>            +#+  +:+       +#+         #
+#    By: anaraujo <anaraujo@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/09/24 10:17:39 by andreia           #+#    #+#              #
-#    Updated: 2023/09/24 15:03:41 by andreia          ###   ########.fr        #
+#    Updated: 2023/09/27 19:15:00 by anaraujo         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -18,7 +18,7 @@ all:
 #-d run the container in background
 
 down:
-	docker-compose down
+	docker-compose -f ./srcs/docker-compose.yml down
 
 #destroy all your ressources
 
