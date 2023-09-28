@@ -22,13 +22,15 @@ down:
 
 #destroy all your ressources
 
-clean:
-	docker compose stop $(docker ps -a -q)
 #allow to delete all the opened images
-	docker rm $(docker ps -a -q)
+clean:
+	docker stop $$(docker ps -a -q);\
+	docker rm $$(docker ps -a -q);\
+	docker rmi -f $$(docker images -qa);\
+	docker volume rm $$(docker volume ls -q);\
+	docker network rm $$(docker network ls -q);\
 
-fclean:
-	
-re:	fclean all
+re:	
+	docker-compose -f ./srcs/docker-compose.yml up -d --build 
 
 .PHONY: all re down clean

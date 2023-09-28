@@ -5,14 +5,34 @@ networks:
     name: inception
 
 services:
-  NGINX:
+
+  nginx:
     container_name: nginx
     image: nginx:42
-    build: requirements/nginx/
+    build: ./requirements/nginx/
     ports:
-      - "443:80"
+      - "443:443"
+    networks:
+      - inception
+    restart: always
+    volumes:
+      - wordpress_data:/var/www/html
+
+  wordpress:
+    container_name: wordpress
+    build: ./requirements/wordpress/
     networks:
       - inception
     env_file:
       - .env
     restart: always
+    volumes:
+      - wordpress_data:/var/www/html
+
+volumes:
+  wordpress_data:
+    driver: local
+    driver_opts:
+      type: none
+      device: /home/anaraujo/data/wordpress
+      o: bind
