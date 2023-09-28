@@ -6,7 +6,7 @@ networks:
 
 services:
   NGINX:
-    container_name: nginx+
+    container_name: nginx
     image: nginx:42
     build: requirements/nginx/
     ports:

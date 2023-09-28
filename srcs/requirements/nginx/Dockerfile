@@ -4,8 +4,12 @@
 FROM debian:bullseye
 
 #Update the NGINX software. Install NGINX.
-RUN sudo apt-get update
-RUN sudo apt-get install nginx
+#Flag -y => automatic yes to prompts. 
+#Assume "yes" as answer to all prompts and run non-interactively.
+
+RUN apt-get update
+RUN apt-get install -y nginx\
+    openssl
 
 #Install ssl
 #Installing an SSL Certificate on NGINX ensures a safe connection between your web server and browser. 
@@ -18,9 +22,13 @@ RUN sudo apt-get install nginx
 #–out – specifies the name of the file your CSR will be saved as
 #https://www.digicert.com/kb/csr-ssl-installation/nginx-openssl.htm
 RUN mkdir etc/nginx/ssl
-RUN openssl req -new -newkey rsa:2048 -nodes -keyout /etc/nginx/ssl/anaraujo.key -out /etc/nginx/ssl/anaraujo.crt
+#RUN openssl req -newkey rsa:4096 -x509 -sha256 -days 365 -nodes -keyout /etc/nginx/ssl/anaraujo.key -out /etc/nginx/ssl/anaraujo.crt
+RUN openssl req -newkey rsa:4096 -x509 -sha256 -days 365 -nodes \
+        -out /etc/nginx/ssl/raccoman.pem \
+        -keyout /etc/nginx/ssl/raccoman.key \
+        -subj "/C=IT/ST=Rome/L=Rome/O=42 School/OU=raccoman/CN=raccoman/"
 
-COPY ./conf/nginx.conf /etc/nginx/conf.d
+COPY ./conf/ /etc/nginx/conf.d
 
 #The EXPOSE instruction informs Docker that the container listens on the specified network ports at runtime.
 EXPOSE 443
