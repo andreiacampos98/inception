@@ -3,20 +3,22 @@ version: "3"
 networks:
   inception:
     name: inception
+    driver: bridge
 
 services:
 
   nginx:
     container_name: nginx
-    image: nginx:42
     build: ./requirements/nginx/
     ports:
       - "443:443"
+    depends_on:
+      - wordpress
     networks:
       - inception
     restart: always
     volumes:
-      - wordpress_data:/var/www/html
+      - wordpress:/var/www/html
 
   wordpress:
     container_name: wordpress
@@ -27,12 +29,14 @@ services:
       - .env
     restart: always
     volumes:
-      - wordpress_data:/var/www/html
+      - wordpress:/var/www/html
 
 volumes:
-  wordpress_data:
+  wordpress:
+    name: wordpress
     driver: local
     driver_opts:
       type: none
-      device: /home/anaraujo/data/wordpress
+      device: /home/anaraujo/Desktop/Inception/wordpress
       o: bind
+#The type of the mount, which can be bind, volume, or tmpfs. 

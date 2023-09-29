@@ -22,11 +22,10 @@ RUN apt-get install -y nginx\
 #–out – specifies the name of the file your CSR will be saved as
 #https://www.digicert.com/kb/csr-ssl-installation/nginx-openssl.htm
 RUN mkdir etc/nginx/ssl
-#RUN openssl req -newkey rsa:4096 -x509 -sha256 -days 365 -nodes -keyout /etc/nginx/ssl/anaraujo.key -out /etc/nginx/ssl/anaraujo.crt
 RUN openssl req -newkey rsa:4096 -x509 -sha256 -days 365 -nodes \
-        -out /etc/nginx/ssl/raccoman.pem \
-        -keyout /etc/nginx/ssl/raccoman.key \
-        -subj "/C=IT/ST=Rome/L=Rome/O=42 School/OU=raccoman/CN=raccoman/"
+       -out /etc/nginx/ssl/anaraujo.crt \
+       -keyout /etc/nginx/ssl/anaraujo.key \
+       -subj "/C=FR/ST=Paris/L=Paris/O=42 School/OU=anaraujo/CN=anaraujo/"
 
 COPY ./conf /etc/nginx/conf.d
 
