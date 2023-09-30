@@ -33,10 +33,10 @@ services:
 
 volumes:
   wordpress:
-    name: wordpress
-    driver: local
-    driver_opts:
-      type: none
-      device: /home/anaraujo/Desktop/Inception/wordpress
-      o: bind
+#    name: wordpress
+#    driver: local
+#    driver_opts:
+#      type: none
+#      device: /home/anaraujo/Desktop/Inception/wordpress
+#      o: bind
 #The type of the mount, which can be bind, volume, or tmpfs. 
