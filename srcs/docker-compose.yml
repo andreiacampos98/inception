@@ -23,6 +23,8 @@ services:
   wordpress:
     container_name: wordpress
     build: ./requirements/wordpress/
+    ports:
+      - "9000:9000"
     networks:
       - inception
     env_file:
@@ -31,12 +33,32 @@ services:
     volumes:
       - wordpress:/var/www/html
 
+  mariadb:
+    container_name: mariadb
+    build: ./requirements/mariadb/
+    ports:
+      - "3306:3306"
+    networks:
+      - inception
+    env_file:
+      - .env
+    restart: always
+    volumes:
+      - mariadb:/var/lib/mysql/html
+
 volumes:
   wordpress:
-#    name: wordpress
-#    driver: local
-#    driver_opts:
-#      type: none
-#      device: /home/anaraujo/Desktop/Inception/wordpress
-#      o: bind
+    name: wordpress
+    driver: local
+    driver_opts:
+      type: none
+      device: /home/anaraujo/inception/srcs/requirements/wordpress
+      o: bind
+  mariadb:
+    name: mariadb
+    driver: local
+    driver_opts:
+      type: none
+      device: /home/anaraujo/inception/srcs/requirements/mariadb
+      o: bind
 #The type of the mount, which can be bind, volume, or tmpfs. 

@@ -11,26 +11,26 @@
 # **************************************************************************** #
 
 all: 
-	docker-compose -f ./srcs/docker-compose.yml up -d --build 
+	@docker-compose -f ./srcs/docker-compose.yml up -d --build 
 
 #Create and build all the containers and they still run in the background
 #Use the -f flag to specify the location of a Compose configuration file.
 #-d run the container in background
 
 down:
-	docker-compose -f ./srcs/docker-compose.yml down
+	@docker-compose -f ./srcs/docker-compose.yml down
 
 #destroy all your ressources
 
 #allow to delete all the opened images
 clean:
-	docker stop $$(docker ps -a -q);\
+	@docker stop $$(docker ps -a -q);\
 	docker rm $$(docker ps -a -q);\
 	docker rmi -f $$(docker images -qa);\
 	docker volume rm $$(docker volume ls -q);\
 	docker network rm $$(docker network ls -q);\
 
 re:	
-	docker-compose -f ./srcs/docker-compose.yml up -d --build 
+	@docker-compose -f ./srcs/docker-compose.yml up -d --build 
 
 .PHONY: all re down clean
