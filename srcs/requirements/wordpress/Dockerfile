@@ -1,6 +1,8 @@
+# creating a base OS image
 FROM debian:bullseye
 
-
+# installing wordpress
+# https://make.wordpress.org/hosting/handbook/server-environment/#system-packages
 RUN apt-get update && apt-get -y install \
 	wget \
 	curl \
@@ -16,29 +18,21 @@ RUN apt-get update && apt-get -y install \
 	php-redis \
 	&& rm -rf /var/lib/apt/lists/*
 
-
-# I need to install wp_cli command and put it in the right directory /usr/local/bin
-RUN curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar \
-  && chmod +x wp-cli.phar \
-  && mv wp-cli.phar /usr/local/bin/wp
-
-# Copy the .conf in the html directory
+# setting the right conf file for php
 COPY ./conf/www.conf /etc/php/7.3/fpm/pool.d/
 
-#Create the folder to enable php start
-RUN mkdir /run/php
+RUN mkdir -p /var/www/html
+WORKDIR /var/www/html
 
-#we copy the script, give the right to launch it in local on our computer
-COPY ./tools/create_wordpress.sh /usr/local/bin/
-RUN chmod +x /usr/local/bin/create_wordpress.sh
-ENTRYPOINT ["/usr/local/bin/create_wordpress.sh"]
+RUN curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar
+RUN chmod +x wp-cli.phar
+RUN mv wp-cli.phar /usr/local/bin/wp
 
-#We go the html directory
-WORKDIR /var/www/html/
+RUN wp core download --allow-root
 
-#The EXPOSE instruction informs Docker that the container listens on the specified network ports at runtime.
-EXPOSE 9000
+# create server root dir
+COPY ./conf/wp-config.php /tmp/
+# copying wordpress-setup.sh to the container
+COPY ./tools/create_wordpress.sh /tmp/
 
-#CMD ["executable", "parameter1", "parameter2"]
-#Launch PHP FPM in foreground and ignore deamonize from conf file (-F)
-CMD ["/usr/sbin/php-fpm7.3", "-F"]
+CMD ["/bin/bash", "/tmp/create_wordpress.sh"]

@@ -6,14 +6,14 @@ volumes:
     driver: local
     driver_opts:
       type: none
-      device: /home/anaraujo/inception/srcs/requirements/wordpress
+      device: /home/anaraujo/data
       o: bind
   mariadb:
     name: mariadb
     driver: local
     driver_opts:
       type: none
-      device: /home/anaraujo/inception/srcs/requirements/mariadb
+      device: /home/anaraujo/data
       o: bind
 #The type of the mount, which can be bind, volume, or tmpfs. 
 

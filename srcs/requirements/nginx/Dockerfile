@@ -11,6 +11,13 @@ RUN apt-get update
 RUN apt-get install -y nginx\
     openssl
 
+#create server root dir
+RUN mkdir -p /var/www/hmtl
+
+# adding wordpress server config file in sites-available
+COPY ./conf/wordpress /etc/nginx/sites-available/
+RUN ln -s /etc/nginx/sites-available/wordpress /etc/nginx/sites-enabled/
+
 #Install ssl
 #Installing an SSL Certificate on NGINX ensures a safe connection between your web server and browser. 
 #openssl – activates the OpenSSL software
@@ -21,13 +28,11 @@ RUN apt-get install -y nginx\
 #–keyout – indicates the domain you’re generating a key for
 #–out – specifies the name of the file your CSR will be saved as
 #https://www.digicert.com/kb/csr-ssl-installation/nginx-openssl.htm
-RUN mkdir etc/nginx/ssl
-RUN openssl req -newkey rsa:4096 -x509 -sha256 -days 365 -nodes \
-       -out /etc/nginx/ssl/anaraujo.crt \
-       -keyout /etc/nginx/ssl/anaraujo.key \
-       -subj "/C=FR/ST=Paris/L=Paris/O=42 School/OU=anaraujo/CN=anaraujo/"
-
-COPY ./conf /etc/nginx/conf.d
+#RUN mkdir etc/nginx/ssl
+RUN openssl req -newkey rsa:2048 -x509 -sha256 -days 365 -nodes \
+       -out /etc/ssl/certs/anaraujo.crt \
+       -keyout /etc/ssl/private/anaraujo.key \
+       -subj "/CN=www.anaraujo.42.fr/C=PT/L=Porto"
 
 RUN mkdir -p /run/nginx
 
