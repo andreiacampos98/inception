@@ -15,6 +15,7 @@ RUN apt-get install -y nginx\
 RUN mkdir -p /var/www/hmtl
 
 # adding wordpress server config file in sites-available
+#the commands ln links the file designated in the source file with the target directory
 COPY ./conf/wordpress /etc/nginx/sites-available/
 RUN ln -s /etc/nginx/sites-available/wordpress /etc/nginx/sites-enabled/
 
@@ -28,13 +29,13 @@ RUN ln -s /etc/nginx/sites-available/wordpress /etc/nginx/sites-enabled/
 #–keyout – indicates the domain you’re generating a key for
 #–out – specifies the name of the file your CSR will be saved as
 #https://www.digicert.com/kb/csr-ssl-installation/nginx-openssl.htm
-#RUN mkdir etc/nginx/ssl
+RUN mkdir -p etc/ssl
 RUN openssl req -newkey rsa:2048 -x509 -sha256 -days 365 -nodes \
        -out /etc/ssl/certs/anaraujo.crt \
        -keyout /etc/ssl/private/anaraujo.key \
-       -subj "/CN=www.anaraujo.42.fr/C=PT/L=Porto"
+       -subj /C=PT/ST=Porto/L=Porto/0=42/OU=42Porto=anaraujo.42.fr/UID=$42_USER
 
-RUN mkdir -p /run/nginx
+#RUN mkdir -p /var/run/nginx
 
 #The EXPOSE instruction informs Docker that the container listens on the specified network ports at runtime.
 EXPOSE 443

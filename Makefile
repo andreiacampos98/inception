@@ -10,7 +10,13 @@
 #                                                                              #
 # **************************************************************************** #
 
-all: 
+all: build up
+
+build:
+	mkdir -p /home/anaraujo/data/mariadb_data /home/anaraujo/data/wordpress_data
+	@sudo grep -Fq "anaraujo.42.fr" /etc/hosts || sudo sed -i '/127\.0\.0\.1/ s/$$/ anaraujo.42.fr/' /etc/hosts
+#se -i - performedits in-place by overwritting the original file
+up: build
 	@docker-compose -f ./srcs/docker-compose.yml up -d --build 
 
 #Create and build all the containers and they still run in the background
@@ -20,17 +26,30 @@ all:
 down:
 	@docker-compose -f ./srcs/docker-compose.yml down
 
-#destroy all your ressources
+start:
+	@docker-compose -f ./srcs/docker-compose.yml start
 
-#allow to delete all the opened images
-clean:
-	@docker stop $$(docker ps -a -q);\
-	docker rm $$(docker ps -a -q);\
-	docker rmi -f $$(docker images -qa);\
-	docker volume rm $$(docker volume ls -q);\
-	docker network rm $$(docker network ls -q);\
+stop:
+	@docker-compose -f ./srcs/docker-compose.yml stop
 
-re:	
-	@docker-compose -f ./srcs/docker-compose.yml up -d --build 
+ps:
+	@docker-compose -f ./srcs/docker-compose.yml ps
+
+rm: stop
+	@docker-compose -f ./srcs/docker-compose.yml rm
+
+del_volumes:
+	@docker-compose -f ./srcs/docker-compose.yml down --volumes
+	@sudo rm -rf /home/anaraujo/data
+
+del:
+	@docker system prune
+#elimina tudo o que nao esta a ser usado
+
+
+re:	fclean all ps
+clean: stop rm
+fclean: clean del_volumes del
+	@sudo grep -Fq " anaraujo.42.fr" /etc/hosts && sudo sed -i 's/ anaraujo.42.fr' etc/hosts
 
 .PHONY: all re down clean

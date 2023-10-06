@@ -1,16 +1,30 @@
 #!/bin/bash
 
-service mysql start 
+mysql_install_db;
+service mysql start;
 
+# Configure database
+if [ -f /var/lib/mysql/${DB_NAME} ]
+	echo "${DB_NAME} already created"
+then
+	# creating database
+	mariadb -u root -e "CREATE DATABASE IF NOT EXISTS ${DB_NAME};"
+	# creating user DB_USER %
+	mariadb -u root -e "CREATE USER IF NOT EXISTS '${DB_USER}'@'%' IDENTIFIED BY '${DB_PASSWORD}';"
+	mariadb -u root -e "GRANT ALL ON ${DB_NAME}.* TO '${DB_USER}'@'%' IDENTIFIED BY '${DB_PASSWORD}';"
+	mariadb -u root -e "FLUSH PRIVILEGES;"
+	# creating user DB_USER local
+	mariadb -u root -e "CREATE USER IF NOT EXISTS '${DB_USER}'@'localhost' IDENTIFIED BY '${DB_PASSWORD}';"
+	mariadb -u root -e "GRANT ALL ON ${DB_NAME}.* TO '${DB_USER}'@'localhost' IDENTIFIED BY '${DB_PASSWORD}';"
+	mariadb -u root -e "FLUSH PRIVILEGES;"
+	echo "${DB_NAME} created database"
+	
+	mariadb -u root -e "CREATE TABLE ${DB_NAME}.todo_list (item_id INT AUTO_INCREMENT, content VARCHAR(255), PRIMARY KEY(item_id));"
+	mariadb -u root -e "INSERT INTO ${DB_NAME}.todo_list (content) VALUES ('My first task, yay');"
+	mariadb -u root -e "INSERT INTO ${DB_NAME}.todo_list (content) VALUES ('Second task, gimme more');"
+	mariadb -u root -e "INSERT INTO ${DB_NAME}.todo_list (content) VALUES ('Last task i promise');"
+	mariadb -u root -e "INSERT INTO ${DB_NAME}.todo_list (content) VALUES ('one more task');"
+fi
 
-echo "CREATE DATABASE IF NOT EXISTS $db1_name ;" > db1.sql
-echo "CREATE USER IF NOT EXISTS '$db1_user'@'%' IDENTIFIED BY '$db1_pwd' ;" >> db1.sql
-echo "GRANT ALL PRIVILEGES ON $db1_name.* TO '$db1_user'@'%' ;" >> db1.sql
-echo "ALTER USER 'root'@'localhost' IDENTIFIED BY '12345' ;" >> db1.sql
-echo "FLUSH PRIVILEGES;" >> db1.sql
-
-mysql < db1.sql
-
-kill $(cat /var/run/mysqld/mysqld.pid)
-
-mysqld
+service mysql stop;
+mysqld;
