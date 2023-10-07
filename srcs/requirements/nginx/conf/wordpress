@@ -17,9 +17,13 @@
 #https://linuxhint.com/use-nginx-try_files-directive/
 #http://nginx.org/en/docs/http/ngx_http_core_module.html#server
 #https://www.educba.com/nginx-autoindex/
+#docker exec -it nginx bash
+#cd /etc/nginx/sites-enabled
+#cat default
 server 
 {
     listen                  443 ssl;
+    #IPv6 addresses (0.7.36) are specified in square brackets
     listen                  [::]:443 ssl;
     server_name             anaraujo.42.fr www.anaraujo.42.fr;
 
@@ -31,20 +35,32 @@ server
 	ssl_protocols		    TLSv1.2;
     
     root                    /var/www/html;
-    # index.php
-    index                   index.php;
 
-    # index.php fallback
+    # Add index.php to the list if you are using PHP
+    index                   index.php index.html index.htm index.nginx-debian.html;
+
     location / 
     {
+        #Checks the existence of files in the specified order 
+        #and uses the first found file for request processing;
+        # First attempt to serve request as file, then
+		# as directory, then fall back to displaying a 404.
+        #The key difference between URIs and URLs is that URIs are identifiers, 
+        #whereas URLs are locators. In other words, a URI simply identifies the resource. 
+        #It does not describe or imply how to locate the resource. 
         try_files $uri $uri/ =404;
         autoindex   on;
     }
 
-    # handle .php
-    location ~ \.php$ 
+    # pass PHP scripts to FastCGI server
+	#
+	location ~ \.php$ 
     {
-        include         snippets/fastcgi-php.conf;
-		fastcgi_pass    wordpress:9000;
-    }
+		include snippets/fastcgi-php.conf;
+	#
+	#	# With php-fpm (or other unix sockets):
+	#	fastcgi_pass unix:/run/php/php7.4-fpm.sock;
+	#	# With php-cgi (or other tcp sockets):
+		fastcgi_pass wordpress:9000;
+	}
 }

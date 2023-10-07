@@ -12,7 +12,7 @@ RUN apt-get install -y nginx\
     openssl
 
 #create server root dir
-RUN mkdir -p /var/www/hmtl
+RUN mkdir -p /var/www/html
 
 # adding wordpress server config file in sites-available
 #the commands ln links the file designated in the source file with the target directory
@@ -33,7 +33,7 @@ RUN mkdir -p etc/ssl
 RUN openssl req -newkey rsa:2048 -x509 -sha256 -days 365 -nodes \
        -out /etc/ssl/certs/anaraujo.crt \
        -keyout /etc/ssl/private/anaraujo.key \
-       -subj /C=PT/ST=Porto/L=Porto/0=42/OU=42Porto=anaraujo.42.fr/UID=$42_USER
+       -subj "/C=PT/ST=Porto/L=Porto/0=42Porto/OU=Inception/CN=www.anaraujo.42.fr"
 
 #RUN mkdir -p /var/run/nginx
 
