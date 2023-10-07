@@ -1,3 +1,9 @@
+#docker exec -it nginx bash
+#cd /var/www/html
+#cat wp-config.php
+#One of the most important files in your WordPress installation is the wp-config.php file. 
+#This file is located in the root of your WordPress file directory and contains 
+#your websites base configuration details, such as database connection information.
 <?php
 /**
  * The base configuration for WordPress
@@ -20,16 +26,16 @@
 
 // ** Database settings - You can get this info from your web host ** //
 /** The name of the database for WordPress */
-define( 'DB_NAME', getenv('db_name') );
+define( 'DB_NAME', getenv('DB_NAME') );
 
 /** Database username */
-define( 'DB_USER', getenv('db_user') );
+define( 'DB_USER', getenv('DB_USER') );
 
 /** Database password */
-define( 'DB_PASSWORD', getenv('db_pwd') );
+define( 'DB_PASSWORD', getenv('DB_PASSWORD') );
 
 /** Database hostname */
-define( 'DB_HOST', getenv('db_host') );
+define( 'DB_HOST', getenv('DB_HOST') );
 
 /** Database charset to use in creating database tables. */
 define( 'DB_CHARSET', 'utf8' );
@@ -65,8 +71,6 @@ define( 'DB_COLLATE', '' );
  *
  * You can have multiple installations in one database if you give each
  * a unique prefix. Only numbers, letters, and underscores please!
- * The $table_prefix is the value placed in the front of your database tables. 
- * Change the value if you want to use something other than wp_ for your database prefix.
  */
 $table_prefix = 'wp_';
 
@@ -83,7 +87,7 @@ $table_prefix = 'wp_';
  * @link https://wordpress.org/support/article/debugging-in-wordpress/
  */
 define( 'WP_DEBUG', true );
-define( 'WP_DEBUG_LOG', '/var/www/html/wp-errors.log' );
+define( 'WP_DEBUG_LOG', '/var/www/wordpress/wp-errors.log' );
 
 /* Add any custom values between this line and the "stop editing" line. */
 
