@@ -50,6 +50,7 @@ server
         #It does not describe or imply how to locate the resource. 
         try_files $uri $uri/ =404;
         autoindex   on;
+        
     }
 
     # pass PHP scripts to FastCGI server

@@ -6,14 +6,14 @@ volumes:
     driver: local
     driver_opts:
       type: none
-      device: /home/anaraujo/data/wordpress_data
+      device: /home/anaraujo/data/wordpress
       o: bind
   mariadb:
     name: mariadb
     driver: local
     driver_opts:
       type: none
-      device: /home/anaraujo/data/mariadb_data
+      device: /home/anaraujo/data/mariadb
       o: bind
 #The type of the mount, which can be bind, volume, or tmpfs. 
 
@@ -58,7 +58,7 @@ services:
       - inception
     env_file:
       - .env
-    restart: on-failure
+    restart: unless-stopped
     volumes:
       - mariadb:/var/lib/mysql
 

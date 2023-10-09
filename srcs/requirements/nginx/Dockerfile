@@ -35,8 +35,6 @@ RUN openssl req -newkey rsa:2048 -x509 -sha256 -days 365 -nodes \
        -keyout /etc/ssl/private/anaraujo.key \
        -subj "/C=PT/ST=Porto/L=Porto/0=42Porto/OU=Inception/CN=www.anaraujo.42.fr"
 
-#RUN mkdir -p /var/run/nginx
-
 #The EXPOSE instruction informs Docker that the container listens on the specified network ports at runtime.
 EXPOSE 443
 

@@ -13,7 +13,7 @@
 all: build up
 
 build:
-	mkdir -p /home/anaraujo/data/mariadb_data /home/anaraujo/data/wordpress_data
+	mkdir -p /home/anaraujo/data/mariadb /home/anaraujo/data/wordpress
 	@sudo grep -Fq "anaraujo.42.fr" /etc/hosts || sudo sed -i '/127\.0\.0\.1/ s/$$/ anaraujo.42.fr/' /etc/hosts
 #se -i - performedits in-place by overwritting the original file
 up: build
