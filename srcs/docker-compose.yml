@@ -32,9 +32,9 @@ services:
       - wordpress
     networks:
       - inception
-    restart: on-failure
     volumes:
-      - wordpress:/var/www/html
+      - wordpress:/var/www/wordpress
+    restart: on-failure
   wordpress:
     container_name: wordpress
     build: ./requirements/wordpress/
@@ -48,7 +48,7 @@ services:
       - .env
     restart: on-failure
     volumes:
-      - wordpress:/var/www/html
+      - wordpress:/var/www/wordpress
   mariadb:
     container_name: mariadb
     build: ./requirements/mariadb/

@@ -10,12 +10,12 @@ FROM debian:bullseye
 RUN apt-get update
 RUN apt-get install -y mariadb-server
 
-COPY ./conf/conf /etc/mysql/mariadb.conf.d/
+COPY ./conf/conf /etc/mysql/mariadb.conf.d/50-server.conf
 
-COPY ./tools/script.sh /
+COPY ./tools/script.sh /tmp/mysql_setup.sh
 
 #The EXPOSE instruction informs Docker that the container listens on the specified network ports at runtime.
 EXPOSE 3306
 
 #CMD ["executable", "parameter1", "parameter2"]
-CMD ["/script.sh"]
+ENTRYPOINT ["sh", "/tmp/mysql_setup.sh"]

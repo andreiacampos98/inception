@@ -50,6 +50,6 @@ del:
 re:	fclean all ps
 clean: stop rm
 fclean: clean del_volumes del
-	@sudo grep -Fq " anaraujo.42.fr" /etc/hosts && sudo sed -i 's/ anaraujo.42.fr' etc/hosts
+	@sudo grep -Fq " anaraujo.42.fr" /etc/hosts && sudo sed -i 's/ anaraujo.42.fr//g' /etc/hosts
 
 .PHONY: all re down clean
