@@ -11,8 +11,11 @@ RUN apt-get update
 RUN apt-get install -y mariadb-server
 
 COPY ./conf/conf /etc/mysql/mariadb.conf.d/50-server.conf
+RUN chmod -R 755 /var/lib/mysql/
 
 COPY ./tools/script.sh /tmp/mysql_setup.sh
+
+#RUN mysql_secure_installation
 
 #The EXPOSE instruction informs Docker that the container listens on the specified network ports at runtime.
 EXPOSE 3306

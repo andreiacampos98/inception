@@ -13,7 +13,7 @@
  * * Database table prefix
  * * ABSPATH
  *
- * @link https://wordpress.org/support/article/editing-wp-config-php/
+ * @link https://wordpress.org/documentation/article/editing-wp-config-php/
  *
  * @package WordPress
  */
@@ -37,7 +37,6 @@ define( 'DB_CHARSET', 'utf8' );
 /** The database collate type. Don't change this if in doubt. */
 define( 'DB_COLLATE', '' );
 
-
 /**#@+
  * Authentication unique keys and salts.
  *
@@ -57,6 +56,7 @@ define( 'AUTH_SALT',        getenv('WP_AUTH_SALT') );
 define( 'SECURE_AUTH_SALT', getenv('WP_SECURE_AUTH_SALT') );
 define( 'LOGGED_IN_SALT',   getenv('WP_LOGGED_IN_SALT') );
 define( 'NONCE_SALT',       getenv('WP_NONCE_SALT') );
+
 /**#@-*/
 
 /**
@@ -64,8 +64,6 @@ define( 'NONCE_SALT',       getenv('WP_NONCE_SALT') );
  *
  * You can have multiple installations in one database if you give each
  * a unique prefix. Only numbers, letters, and underscores please!
- * The $table_prefix is the value placed in the front of your database tables. 
- * Change the value if you want to use something other than wp_ for your database prefix.
  */
 $table_prefix = 'wp_';
 
@@ -79,10 +77,9 @@ $table_prefix = 'wp_';
  * For information on other constants that can be used for debugging,
  * visit the documentation.
  *
- * @link https://wordpress.org/support/article/debugging-in-wordpress/
+ * @link https://wordpress.org/documentation/article/debugging-in-wordpress/
  */
 define( 'WP_DEBUG', false );
-#define( 'WP_DEBUG_LOG', '/var/www/html/wp-errors.log' );
 
 /* Add any custom values between this line and the "stop editing" line. */
 
