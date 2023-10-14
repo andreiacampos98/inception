@@ -40,8 +40,9 @@ services:
     build: ./requirements/wordpress/
     expose: 
       - "9000"
-    depends_on:
-      - mariadb
+    depends_on: 
+      mariadb:
+        condition: service_healthy
     networks:
       - inception
     env_file:
@@ -54,6 +55,12 @@ services:
     build: ./requirements/mariadb/
     expose: 
       - "3306"
+    healthcheck:
+      test: mysqladmin ping -h localhost -uroot -p${db_root_pwd}
+      interval: 5s
+      timeout: 5s
+      retries: 20
+      start_period: 10s
     networks:
       - inception
     env_file:

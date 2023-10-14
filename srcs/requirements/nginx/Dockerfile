@@ -38,6 +38,9 @@ RUN openssl req -newkey rsa:2048 -x509 -sha256 -days 365 -nodes \
 #The EXPOSE instruction informs Docker that the container listens on the specified network ports at runtime.
 EXPOSE 443
 
+RUN chmod 755 /var/www/html
+RUN chown -R www-data:www-data /var/www/html
+
 #CMD ["executable", "parameter1", "parameter2"]
 CMD ["nginx", "-g", "daemon off;"]
 

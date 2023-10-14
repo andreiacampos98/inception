@@ -15,31 +15,32 @@ all: build up
 build:
 	mkdir -p /home/anaraujo/data/mariadb /home/anaraujo/data/wordpress
 	@sudo grep -Fq "anaraujo.42.fr" /etc/hosts || sudo sed -i '/127\.0\.0\.1/ s/$$/ anaraujo.42.fr/' /etc/hosts
+	docker compose -f ./srcs/docker-compose.yml build
 #se -i - performedits in-place by overwritting the original file
 up: build
-	@docker-compose -f ./srcs/docker-compose.yml up -d --build 
+	@docker compose -f ./srcs/docker-compose.yml up -d --no-build 
 
 #Create and build all the containers and they still run in the background
 #Use the -f flag to specify the location of a Compose configuration file.
 #-d run the container in background
 
 down:
-	@docker-compose -f ./srcs/docker-compose.yml down
+	@docker compose -f ./srcs/docker-compose.yml down
 
 start:
-	@docker-compose -f ./srcs/docker-compose.yml start
+	@docker compose -f ./srcs/docker-compose.yml start
 
 stop:
-	@docker-compose -f ./srcs/docker-compose.yml stop
+	@docker compose -f ./srcs/docker-compose.yml stop
 
 ps:
-	@docker-compose -f ./srcs/docker-compose.yml ps
+	@docker compose -f ./srcs/docker-compose.yml ps
 
 rm: stop
-	@docker-compose -f ./srcs/docker-compose.yml rm
+	@docker compose -f ./srcs/docker-compose.yml rm
 
 del_volumes:
-	@docker-compose -f ./srcs/docker-compose.yml down --volumes
+	@docker compose -f ./srcs/docker-compose.yml down --volumes
 	@sudo rm -rf /home/anaraujo/data
 
 del:
