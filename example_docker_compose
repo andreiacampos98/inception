@@ -1,0 +1,51 @@
+version: '3.3'
+
+services:
+  node_id_1:
+    build:
+      context: Temp/build_context
+      dockerfile: ../../Dockerfile
+      args:
+        NODEID: 1
+    container_name: NODE_ID_1
+    stop_signal: SIGKILL
+    stop_grace_period: 1s
+    cap_add:
+      - NET_ADMIN
+      - IPC_LOCK
+      - SYS_NICE
+    networks:
+      cubepower_sim: 
+        ipv4_address: 172.31.5.1
+  node_id_1334:
+    build:
+      context: Temp/build_context
+      dockerfile: ../../Dockerfile
+      args:
+        NODEID: 1334
+    container_name: NODE_ID_1334
+    stop_signal: SIGKILL
+    stop_grace_period: 1s
+    networks:
+      cubepower_sim:
+        ipv4_address: 172.31.5.54
+  node_id_1335:
+    build:
+      context: Temp/build_context
+      dockerfile: ../../Dockerfile
+      args:
+        NODEID: 1335
+    container_name: NODE_ID_1335
+    stop_signal: SIGKILL
+    stop_grace_period: 1s
+    networks:
+      cubepower_sim:
+        ipv4_address: 172.31.5.55
+networks:
+  cubepower_sim:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.31.5.0/24
+          gateway: 172.31.5.254

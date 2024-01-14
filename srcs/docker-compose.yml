@@ -1,71 +1,71 @@
-version: "3"
-
-volumes:
-  wordpress:
-    name: wordpress
-    driver: local
-    driver_opts:
-      type: none
-      device: /home/anaraujo/data/wordpress
-      o: bind
-  mariadb:
-    name: mariadb
-    driver: local
-    driver_opts:
-      type: none
-      device: /home/anaraujo/data/mariadb
-      o: bind
-#The type of the mount, which can be bind, volume, or tmpfs. 
+services:
+    mariadb:
+        container_name: mariadb
+        build:
+            context: ./requirements/mariadb
+            dockerfile: Dockerfile
+        env_file:
+            - .env
+        restart: unless-stopped
+        image: mariadb
+        volumes:
+            - mariadb_data:/var/lib/mysql
+        ports:
+            - "3306:3306"
+        networks:
+            - Inception
+    nginx:
+        container_name: nginx
+        depends_on:
+            - wordpress
+        build:
+            context: ./requirements/nginx
+            dockerfile: Dockerfile
+        restart: unless-stopped
+        env_file:
+            - .env
+        image: nginx
+        volumes:
+            - wordpress_data:/var/www/html
+        ports:
+            - "443:443"
+        networks:
+            - Inception
+    wordpress:
+        container_name: wordpress
+        depends_on:
+            - mariadb
+        build:
+            context: ./requirements/wordpress
+            dockerfile: Dockerfile
+        restart: unless-stopped
+        image: wordpress
+        env_file:
+            - .env
+        volumes:
+            - wordpress_data:/var/www/html
+        ports:
+            - "9000:9000"
+        networks:
+            - Inception
 
 networks:
-  inception:
-    name: inception
-    driver: bridge
+    Inception:
+        name: inception
+        driver: bridge
 
-services:
-  nginx:
-    container_name: nginx
-    build: ./requirements/nginx/
-    ports:
-      - "443:443"
-    depends_on:
-      - wordpress
-    networks:
-      - inception
-    volumes:
-      - wordpress:/var/www/wordpress
-    restart: on-failure
-  wordpress:
-    container_name: wordpress
-    build: ./requirements/wordpress/
-    expose: 
-      - "9000"
-    depends_on: 
-      mariadb:
-        condition: service_healthy
-    networks:
-      - inception
-    env_file:
-      - .env
-    restart: on-failure
-    volumes:
-      - wordpress:/var/www/wordpress
-  mariadb:
-    container_name: mariadb
-    build: ./requirements/mariadb/
-    expose: 
-      - "3306"
-    healthcheck:
-      test: mysqladmin ping -h localhost -uroot -p${db_root_pwd}
-      interval: 5s
-      timeout: 5s
-      retries: 20
-      start_period: 10s
-    networks:
-      - inception
-    env_file:
-      - .env
-    restart: unless-stopped
-    volumes:
-      - mariadb:/var/lib/mysql
-
+volumes:
+  mariadb_data:
+    name: mariadb_data
+    driver: local
+    driver_opts:
+      type: 'none'
+      o: 'bind'
+      device: '/home/anaraujo/data/mariadb'
+  wordpress_data:
+    name: wordpress_data
+    driver: local
+    driver_opts:
+      type: 'none'
+      o: 'bind'
+      device: '/home/anaraujo/data/wordpress'

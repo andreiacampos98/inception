@@ -1,26 +1,27 @@
+# Dockerfile-wordpress
 FROM debian:bullseye
-EXPOSE 9000
 
-RUN apt update
-RUN apt upgrade -y
+# Install necessary packages
+RUN apt update -y && \
+    apt install -y \
+        php7.4-fpm \
+        php7.4-mysql \
+        curl \
+    && rm -rf /var/lib/apt/lists/* \
+	&& apt-get clean
 
-# Install wordpress
-RUN apt install wget -y
-RUN apt install php7.4 php-fpm php-mysql mariadb-client -y
-RUN wget https://wordpress.org/wordpress-6.3.1.tar.gz -P /var/www
-RUN cd /var/www && tar -xzf wordpress-6.3.1.tar.gz && rm wordpress-6.3.1.tar.gz
-COPY ./conf/wp-config.php /var/www/wordpress/
-RUN chown -R root:root /var/www/wordpress
+# Create necessary directories and set permissions
+RUN mkdir -p /var/www/html
 
-# Configure php to work with wordpress
-COPY ./conf/www.conf /etc/php/7.4/fpm/pool.d/
-RUN mkdir -p /run/php
+# Copy the necessary files
+COPY ./conf/www.conf /tmp/www.conf
+COPY ./tools/entry.sh /tmp/entry.sh
+COPY ./conf/wp-config.php /tmp/wp-config.php
 
-# Configure wordpress using wp cli
-RUN wget https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar
-RUN chmod +x wp-cli.phar
-RUN mv wp-cli.phar /usr/local/bin/wp
+# Set permissions
+RUN chmod 755 /tmp/www.conf
+RUN chmod 755 /tmp/entry.sh
+RUN chmod 755 /tmp/wp-config.php
 
-COPY ./tools/wp_setup.sh /tmp/
-
-ENTRYPOINT [ "sh", "/tmp/wp_setup.sh" ]
+# Set the entrypoint script as the entry point for the container
+ENTRYPOINT ["/bin/bash", "/tmp/entry.sh"]

@@ -1,24 +1,23 @@
-#A próxima versão do Debian tem o codinome "trixie" — "teste (testing)", — nenhuma data de lançamento foi definida
-#Debian 12 ("bookworm") — versão "estável (stable)" atual
-#Debian 11 ("bullseye") — versão "estável antiga (oldstable)" atual 
+# Dockerfile-mariadb
 FROM debian:bullseye
 
-#Update the mariadb software. Install mariadb.
-#Flag -y => automatic yes to prompts. 
-#Assume "yes" as answer to all prompts and run non-interactively.
+# Install MariaDB
+RUN apt-get update && \
+    apt-get install -y\
+            mariadb-server && \
+    rm -rf /var/lib/apt/lists/*
 
-RUN apt-get update
-RUN apt-get install -y mariadb-server
+# Create necessary directories and set permissions
+RUN mkdir -p /var/run/mysqld && \
+    chown -R mysql:mysql /var/run/mysqld && \
+    chown -R mysql:mysql /var/lib/mysql
 
-COPY ./conf/conf /etc/mysql/mariadb.conf.d/50-server.conf
-RUN chmod -R 755 /var/lib/mysql/
+# Remove the default MySQL configuration
+RUN rm -f /etc/mysql/my.cnf
 
-COPY ./tools/script.sh /tmp/mysql_setup.sh
+# Copy the entrypoint script
+COPY ./tools/entry.sh /tmp/entry.sh
+RUN chmod 755 /tmp/entry.sh
 
-#RUN mysql_secure_installation
-
-#The EXPOSE instruction informs Docker that the container listens on the specified network ports at runtime.
-EXPOSE 3306
-
-#CMD ["executable", "parameter1", "parameter2"]
-ENTRYPOINT ["sh", "/tmp/mysql_setup.sh"]
+# Set the entrypoint script as the entry point for the container
+ENTRYPOINT ["/bin/bash", "/tmp/entry.sh"]
