@@ -2,8 +2,8 @@
 
 ## Table of Contents
 
-- [Pre-requisites](# Pre-Requisites)
-  - Create a Virtual Machine
+- [Pre-requisites](#Pre-Requisites)
+  - [Create a Virtual Machine](#Create-a-Virtual-machine)
 
   - [Setting up Shared Folder](#setting-up-shared-folder-in-ubuntu-vm-with-virtualbox-guest-additions)
     - [Install VirtualBox Guest Additions](#install-virtualbox-guest-additions)
